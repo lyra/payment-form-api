@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/**
+ * This file is part of Lyra payment form API.
+ * Copyright (C) Lyra Network.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<cards>
+    <card code="CB" label="CB" />
+    <card code="E-CARTEBLEUE" label="E-Carte bleue" />
+    <card code="MAESTRO" label="Maestro" />
+    <card code="MASTERCARD" label="MasterCard" />
+    <card code="VISA" label="Visa" />
+    <card code="VISA_ELECTRON" label="Visa Electron" />
+    <card code="AMEX" label="American Express" />
+    <card code="ACCORD_STORE" label="Carte de paiement Banque Accord" />
+    <card code="ACCORD_STORE_SB" label="Carte de paiement Banque Accord - Sandbox" />
+    <card code="ALINEA" label="Carte Privative Alinea" />
+    <card code="ALINEA_CDX" label="Carte cadeau Alinea" />
+    <card code="ALINEA_CDX_SB" label="Carte cadeau Alinea - SandBox" />
+    <card code="ALINEA_SB" label="Carte Privative Alinea - SandBox" />
+    <card code="AURORE-MULTI" label="Carte Aurore" />
+    <card code="BANCONTACT" label="Carte Maestro Bancontact Mistercash" />
+    <card code="BITCOIN" label="Paiement par monnaie virtuelle" />
+    <card code="BIZZBEE_CDX" label="Carte cadeau Bizzbee" />
+    <card code="BIZZBEE_CDX_SB" label="Carte cadeau Bizzbee - Sandbox" />
+    <card code="BRICE_CDX" label="Carte cadeau Brice" />
+    <card code="BRICE_CDX_SB" label="Carte cadeau Brice - Sandbox" />
+    <card code="CDGP" label="Carte Privilège" />
+    <card code="COF3XCB" label="3 fois CB Cofinoga" />
+    <card code="COF3XCB_SB" label="3 fois CB Cofinoga - Sandbox" />
+    <card code="COFINOGA" label="Carte Be Smart" />
+    <card code="CORA_BLANCHE" label="Carte Cora Blanche" />
+    <card code="CORA_PREM" label="Carte Cora Premium" />
+    <card code="CORA_VISA" label="Carte Cora Visa" />
+    <card code="DINERS" label="Carte Diners Club" />
+    <card code="E_CV" label="E-chèque vacance" />
+    <card code="EDENRED_TR" label="Ticket Restaurant" />
+    <card code="EDENRED_EC" label="Ticket EcoCheque" />
+    <card code="GIROPAY" label="Giropay" />
+    <card code="KLARNA" label="Paiement par facture Klarna" />
+    <card code="IDEAL" label="iDEAL virement bancaire" />
+    <card code="ILLICADO" label="Carte cadeau Illicado" />
+    <card code="ILLICADO_SB" label="Carte cadeau Illicado - Sandbox" />
+    <card code="JCB" label="Carte JCB" />
+    <card code="JOUECLUB_CDX" label="Carte cadeau Jouéclub" />
+    <card code="JOUECLUB_CDX_SB" label="Carte cadeau Jouéclub - Sandbox" />
+    <card code="JULES_CDX" label="Carte cadeau Jules" />
+    <card code="JULES_CDX_SB" label="Carte cadeau Jules - Sandbox" />
+    <card code="ONEY" label="Paiement en 3/4 fois Oney FacilyPay" />
+    <card code="ONEY_SANDBOX" label="Paiement en 3/4 fois Oney FacilyPay - Sandbox" />
+    <card code="PAYLIB" label="Paylib" />
+    <card code="PAYPAL" label="PayPal" />
+    <card code="PAYPAL_SB" label="PayPal - Sandbox" />
+    <card code="PAYSAFECARD" label="Carte prépayée Paysafecard" />
+    <card code="POSTFINANCE" label="PostFinance" />
+    <card code="POSTFINANCE_EFIN" label="PostFinance mode E-finance" />
+    <card code="RUPAY" label="RuPay" />
+    <card code="S-MONEY" label="S-Money" />
+    <card code="SCT" label="Virement SEPA" />
+    <card code="SDD" label="Prélèvement SEPA" />
+    <card code="SOFORT_BANKING" label="Sofort" />
+    <card code="TRUFFAUT_CDX" label="Carte cadeau Truffaut" />
+</cards>

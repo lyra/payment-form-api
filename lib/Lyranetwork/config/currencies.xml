@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of Lyra payment form API.
+ * Copyright (C) Lyra Network.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<currencies>
+    <currency alpha3="ARS" num="032" decimals="2" />
+    <currency alpha3="AUD" num="036" decimals="2" />
+    <currency alpha3="KHR" num="116" decimals="0" />
+    <currency alpha3="CAD" num="124" decimals="2" />
+    <currency alpha3="CNY" num="156" decimals="1" />
+    <currency alpha3="HRK" num="191" decimals="2" />
+    <currency alpha3="CZK" num="203" decimals="2" />
+    <currency alpha3="DKK" num="208" decimals="2" />
+    <currency alpha3="EKK" num="233" decimals="2" />
+    <currency alpha3="HKD" num="344" decimals="2" />
+    <currency alpha3="HUF" num="348" decimals="2" />
+    <currency alpha3="ISK" num="352" decimals="0" />
+    <currency alpha3="IDR" num="360" decimals="0" />
+    <currency alpha3="JPY" num="392" decimals="0" />
+    <currency alpha3="KRW" num="410" decimals="0" />
+    <currency alpha3="LVL" num="428" decimals="2" />
+    <currency alpha3="LTL" num="440" decimals="2" />
+    <currency alpha3="MYR" num="458" decimals="2" />
+    <currency alpha3="MXN" num="484" decimals="2" />
+    <currency alpha3="NZD" num="554" decimals="2" />
+    <currency alpha3="NOK" num="578" decimals="2" />
+    <currency alpha3="PHP" num="608" decimals="2" />
+    <currency alpha3="RUB" num="643" decimals="2" />
+    <currency alpha3="SGD" num="702" decimals="2" />
+    <currency alpha3="ZAR" num="710" decimals="2" />
+    <currency alpha3="SEK" num="752" decimals="2" />
+    <currency alpha3="CHF" num="756" decimals="2" />
+    <currency alpha3="THB" num="764" decimals="2" />
+    <currency alpha3="GBP" num="826" decimals="2" />
+    <currency alpha3="USD" num="840" decimals="2" />
+    <currency alpha3="TWD" num="901" decimals="1" />
+    <currency alpha3="RON" num="946" decimals="2" />
+    <currency alpha3="TRY" num="949" decimals="2" />
+    <currency alpha3="XOF" num="952" decimals="0" />
+    <currency alpha3="BGN" num="975" decimals="2" />
+    <currency alpha3="EUR" num="978" decimals="2" />
+    <currency alpha3="PLN" num="985" decimals="2" />
+    <currency alpha3="BRL" num="986" decimals="2" />
+</currencies>

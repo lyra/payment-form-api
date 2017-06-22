@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of Lyra payment form API.
+ * Copyright (C) Lyra Network.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<languages>
+    <language code="de" label="German" />
+    <language code="en" label="English" />
+    <language code="es" label="Spanish" />
+    <language code="fr" label="French" />
+    <language code="it" label="Italian" />
+    <language code="ja" label="Japanese" />
+    <language code="nl" label="Dutch" />
+    <language code="pl" label="Polish" />
+    <language code="pt" label="Portuguese" />
+    <language code="ru" label="Russian" />
+    <language code="sv" label="Swedish" />
+    <language code="tr" label="Turkish" />
+    <language code="zh" label="Chinese" />
+</languages>
