@@ -61,9 +61,9 @@ $keyTest = '1111111111111111';
 $keyProd = '2222222222222222';
 
 $response = new \LyraNetwork\Response($_REQUEST, $ctxMode, $keyTest, $keyProd);
-$response->setMerchantLanguage('fr');
 
-if (!$response->isAuthentified()) {
+if (! $response->isAuthentified()) {
+    // Unauthenticated response received
     die('Authentication failed !');
 }
 

@@ -54,43 +54,43 @@ class Response
     private $extraResult;
 
     /**
-     * Value of vads_auth_result
+     * Value of vads_auth_result.
      *
      * @var string
      */
     private $authResult;
 
     /**
-     * Value of vads_warranty_result
+     * Value of vads_warranty_result.
      *
      * @var string
      */
     private $warrantyResult;
 
     /**
-     * Transaction status (vads_trans_status)
+     * Transaction status (value of vads_trans_status).
      *
      * @var string
      */
     private $transStatus;
 
     /**
-     * Transaction status (vads_trans_status)
+     * CMS original encoding.
      *
      * @var string
      */
-    private $encoding = 'UTF-8';
+    private $originalEncoding = 'UTF-8';
 
     /**
-     * Prefered language in which to send responses to IPN call.
+     * Prefered merchant language.
      *
      * @var string
      */
-    private $language = 'en';
+    private $merchantLanguage = 'en';
 
     /**
      * Constructor for Response class.
-     * Prepare to analyse check URL or return URL call.
+     * Prepare to analyse IPN URL or return URL call.
      *
      * @param array[string][string] $params
      * @param string $ctx_mode
@@ -113,26 +113,28 @@ class Response
 
     /**
      * Set website original encoding. If passed encoding is not recognized by API, UTF-8 is used.
+     *
      * @param string $encoding
      * @return Response
      */
     public function setOriginalEncoding($encoding)
     {
         if (in_array(strtoupper($encoding), Util::$SUPPORTED_ENCODINGS)) {
-            $this->encoding =  strtoupper($encoding);
+            $this->originalEncoding =  strtoupper($encoding);
         }
 
         return $this;
     }
 
     /**
-     * Prefered language used to translate
+     * Set prefered merchant language used to translate responses sent to platform.
+     *
      * @param string $language
      * @return Response
      */
     public function setMerchantLanguage($language)
     {
-        $this->language = $language;
+        $this->merchantLanguage = $language;
 
         return $this;
     }
@@ -148,7 +150,7 @@ class Response
     }
 
     /**
-     * Return the signature computed from the received parameters, for log/debug purposes.
+     * Return the signature computed from the received parameters, for log / debug purposes.
      *
      * @param bool $hashed
      * @return string
@@ -471,17 +473,18 @@ class Response
         );
 
         $success = Util::findInArray($case, $cases, false);
-        $message = key_exists($case, $cases) ? self::translate($case, self::TYPE_IPN_RESPONSE, $this->language) : '';
+        $message = key_exists($case, $cases) ? self::translate($case, self::TYPE_IPN_RESPONSE, $this->merchantLanguage) : '';
 
         if (! empty($extra_message)) {
             $message .= ' ' . $extra_message;
         }
 
+        $message = trim($message);
         $message = str_replace("\n", ' ', $message);
 
         // convert response to send to platform if necessary
-        if ($this->encoding !== 'UTF-8') {
-            $message = iconv($this->encoding, 'UTF-8', $message);
+        if ($this->originalEncoding !== 'UTF-8') {
+            $message = iconv($this->originalEncoding, 'UTF-8', $message);
         }
 
         $content = $success ? 'OK-' : 'KO-';
