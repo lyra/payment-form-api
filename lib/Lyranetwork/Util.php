@@ -65,7 +65,7 @@ class Util
         if (! isset(self::$cache['languages'])) {
             self::$cache['languages'] = array();
 
-            $xml = simplexml_load_file('config/languages.xml');
+            $xml = simplexml_load_file(__DIR__ . '/config/languages.xml');
             foreach ($xml->language as $language) {
                 self::$cache['languages'][(string) $language['code']] = (string) $language['label'];
             }
@@ -101,7 +101,7 @@ class Util
         if (! isset(self::$cache['currencies'])) {
             self::$cache['currencies'] = array();
 
-            $xml = simplexml_load_file('config/currencies.xml');
+            $xml = simplexml_load_file(__DIR__ . '/config/currencies.xml');
             foreach ($xml->currency as $currency) {
                 self::$cache['currencies'][] = new Currency(
                     (string) $currency['alpha3'],
@@ -199,7 +199,7 @@ class Util
         if (! isset(self::$cache['cards'])) {
             self::$cache['cards'] = array();
 
-            $xml = simplexml_load_file('config/cards.xml');
+            $xml = simplexml_load_file(__DIR__ . '/config/cards.xml');
             foreach ($xml->card as $card) {
                 self::$cache['cards'][(string) $card['code']] = (string) $card['label'];
             }
