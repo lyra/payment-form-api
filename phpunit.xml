@@ -1,0 +1,19 @@
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/3.7/phpunit.xsd" 
+         bootstrap="tests/bootstrap.php" 
+         colors="true"
+         verbose="true">
+
+    <testsuites>
+        <testsuite name="Lyra payment form API Test Suite">
+            <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>lib</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>
