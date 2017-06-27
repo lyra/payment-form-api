@@ -324,10 +324,10 @@ class Request
     /**
      * Set multi payment configuration.
      *
-     * @param $total_in_cents total
-     * @param $first_in_cents amount
-     * @param $count total
-     * @param $period number
+     * @param int $total_in_cents
+     * @param int $first_in_cents
+     * @param int $count
+     * @param int $period
      * @return boolean
      */
     public function setMultiPayment($total_in_cents = null, $first_in_cents = null, $count = 3, $period = 30)

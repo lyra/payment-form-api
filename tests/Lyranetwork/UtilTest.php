@@ -47,7 +47,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(count($currencies) > 0);
 
         foreach ($currencies as $currency) {
-            $this->assertTrue(is_a($currency, '\Lyranetwork\Currency'));
+            $this->assertInstanceOf(Currency::class, $currency);
         }
 
         $any = $currencies[0];
