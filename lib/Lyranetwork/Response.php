@@ -510,14 +510,14 @@ class Response
      */
     public static function translate($result, $result_type, $lang, $append_code = false)
     {
-        $lang_file = 'i18n/' . $lang . '/messages.php';
+        global $i18n;
 
-        if (! is_file($lang_file)) {
+        if (! is_file(dirname(__FILE__) . '/i18n/' . $lang . '/messages.php')) {
             // by default, load english translations
             $lang = 'en';
         }
 
-        include_once 'i18n/' . $lang . '/messages.php';
+        include_once dirname(__FILE__) . '/i18n/' . $lang . '/messages.php';
 
         $text = Util::findInArray($result ? $result : 'empty', $i18n[$result_type], $i18n['unknown']);
 

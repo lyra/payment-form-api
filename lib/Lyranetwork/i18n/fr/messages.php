@@ -10,6 +10,8 @@
  *
  * @var array
  */
+global $i18n;
+
 $i18n = array();
 
 $i18n['unknown'] = 'Inconnu';
