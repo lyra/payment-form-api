@@ -15,15 +15,15 @@
     <card code="VISA" label="Visa" />
     <card code="VISA_ELECTRON" label="Visa Electron" />
     <card code="AMEX" label="American Express" />
-    <card code="ACCORD_STORE" label="Carte de paiement Banque Accord" />
-    <card code="ACCORD_STORE_SB" label="Carte de paiement Banque Accord - Sandbox" />
+    <card code="ACCORD_STORE" label="Carte de paiement Oney" />
+    <card code="ACCORD_STORE_SB" label="Carte de paiement Oney - Sandbox" />
     <card code="ALINEA" label="Carte Privative Alinea" />
     <card code="ALINEA_CDX" label="Carte cadeau Alinea" />
     <card code="ALINEA_CDX_SB" label="Carte cadeau Alinea - SandBox" />
     <card code="ALINEA_SB" label="Carte Privative Alinea - SandBox" />
     <card code="AURORE-MULTI" label="Carte Aurore" />
     <card code="BANCONTACT" label="Carte Maestro Bancontact Mistercash" />
-    <card code="BITCOIN" label="Paiement par monnaie virtuelle" />
+    <card code="BITCOIN" label="Bitcoin" />
     <card code="BIZZBEE_CDX" label="Carte cadeau Bizzbee" />
     <card code="BIZZBEE_CDX_SB" label="Carte cadeau Bizzbee - Sandbox" />
     <card code="BRICE_CDX" label="Carte cadeau Brice" />
@@ -39,9 +39,12 @@
     <card code="E_CV" label="E-chèque vacance" />
     <card code="EDENRED_TR" label="Ticket Restaurant" />
     <card code="EDENRED_EC" label="Ticket EcoCheque" />
+    <card code="EPS" label="eps-Überweisung" />
+    <card code="FULLCB3X" label="Paiement en 3X avec BNPP PF" />
+    <card code="FULLCB4X" label="Paiement en 4X avec BNPP PF" />
     <card code="GIROPAY" label="Giropay" />
-    <card code="KLARNA" label="Paiement par facture Klarna" />
-    <card code="IDEAL" label="iDEAL virement bancaire" />
+    <card code="KLARNA" label="Klarna" />
+    <card code="IDEAL" label="iDEAL" />
     <card code="ILLICADO" label="Carte cadeau Illicado" />
     <card code="ILLICADO_SB" label="Carte cadeau Illicado - Sandbox" />
     <card code="JCB" label="Carte JCB" />
@@ -49,6 +52,7 @@
     <card code="JOUECLUB_CDX_SB" label="Carte cadeau Jouéclub - Sandbox" />
     <card code="JULES_CDX" label="Carte cadeau Jules" />
     <card code="JULES_CDX_SB" label="Carte cadeau Jules - Sandbox" />
+    <card code="MASTERPASS" label="Portefeuille numérique MasterCard" />
     <card code="ONEY" label="Paiement en 3/4 fois Oney FacilyPay" />
     <card code="ONEY_SANDBOX" label="Paiement en 3/4 fois Oney FacilyPay - Sandbox" />
     <card code="PAYLIB" label="Paylib" />
@@ -63,4 +67,7 @@
     <card code="SDD" label="Prélèvement SEPA" />
     <card code="SOFORT_BANKING" label="Sofort" />
     <card code="TRUFFAUT_CDX" label="Carte cadeau Truffaut" />
+    <card code="VILLAVERDE" label="Carte cadeau Villaverde" />
+    <card code="VILLAVERDE_SB" label="Carte cadeau Villaverde - SandBox" />
+    <card code="VPAY Carte" label="V Pay" />
 </cards>
