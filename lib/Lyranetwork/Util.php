@@ -190,22 +190,22 @@ class Util
     }
 
     /**
-     * Returns an array of card types accepted by the payment platform.
+     * Returns an array of payment means accepted by the payment platform.
      *
      * @return array[string][string]
      */
-    public static function getSupportedCardTypes()
+    public static function getSupportedPaymentMeans()
     {
-        if (! isset(self::$cache['cards'])) {
-            self::$cache['cards'] = array();
+        if (! isset(self::$cache['payments'])) {
+            self::$cache['payments'] = array();
 
-            $xml = simplexml_load_file(__DIR__ . '/config/cards.xml');
-            foreach ($xml->card as $card) {
-                self::$cache['cards'][(string) $card['code']] = (string) $card['label'];
+            $xml = simplexml_load_file(__DIR__ . '/config/payments.xml');
+            foreach ($xml->payment as $payment) {
+                self::$cache['payments'][(string) $payment['code']] = (string) $payment['label'];
             }
         }
 
-        return self::$cache['cards'];
+        return self::$cache['payments'];
     }
 
     /**

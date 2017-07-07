@@ -65,14 +65,14 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($any->getNum(), $num);
     }
 
-    public function testSupportedCardTypes()
+    public function testSupportedPaymentMeans()
     {
-        $cards = Util::getSupportedCardTypes();
+        $means = Util::getSupportedPaymentMeans();
 
-        $this->assertTrue(is_array($cards));
-        $this->assertTrue(count($cards) > 0);
+        $this->assertTrue(is_array($means));
+        $this->assertTrue(count($means) > 0);
 
-        $keys = array_keys($cards);
+        $keys = array_keys($means);
         foreach ($keys as $key) {
             $this->assertRegExp('/^[A-Za-z0-9\-_]+$/', $key);
         }
