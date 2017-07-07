@@ -14,7 +14,7 @@
     <payment code="MASTERCARD" label="MasterCard" />
     <payment code="VISA" label="Visa" />
     <payment code="VISA_ELECTRON" label="Visa Electron" />
-    <payment code="VPAY" label="Carte V Pay" />
+    <payment code="VPAY" label="V PAY" />
     <payment code="AMEX" label="American Express" />
     <payment code="ACCORD_STORE" label="Carte de paiement Oney" />
     <payment code="ACCORD_STORE_SB" label="Carte de paiement Oney - Sandbox" />
@@ -63,7 +63,6 @@
     <payment code="POSTFINANCE" label="PostFinance" />
     <payment code="POSTFINANCE_EFIN" label="PostFinance mode E-finance" />
     <payment code="RUPAY" label="RuPay" />
-    <payment code="S-MONEY" label="S-Money" />
     <payment code="SCT" label="Virement SEPA" />
     <payment code="SDD" label="Prélèvement SEPA" />
     <payment code="SOFORT_BANKING" label="Sofort" />
