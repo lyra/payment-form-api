@@ -11,7 +11,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     private static $configData = array();
     private static $cartData = array();
 
-    public function setUp()
+    public static function setUpBeforeClass()
     {
         self::$configData = array(
             'site_id' => '12345678',
