@@ -71,21 +71,21 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request();
 
         $result = $request->setFromArray(self::$configData);
-        $this->assertTrue((bool) $result);
+        $this->assertTrue((bool) $result, 'Error when trying to set request data from array.');
 
         foreach (self::$cartData as $key => $value) {
-            $this->assertTrue((bool) $request->set($key, $value));
+            $this->assertTrue((bool) $request->set($key, $value), "Error when trying to set [$value] for [$key] field.");
         }
 
         $errors = array();
         $request->isRequestReady($errors);
-        $this->assertEmpty($errors);
+        $this->assertEmpty($errors, 'Validation errors occured : ' . print_r($errors, true));
 
         $data = array(
-            'amount' => 23.56,
+            'amount' => 23.56, // must be in cents
             'contrib' => 'test1.x_1.1.2/1.5.5/5.6.3',
-            'currency' => 'EUR',
-            'order_id' => 'ORD/3536',
+            'currency' => 'EUR', // numeric code expected
+            'order_id' => 'ORD/3536', // should not contain slash
             'order_info' => 'Important order'
         );
         $request->setFromArray($data);
@@ -97,22 +97,27 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('vads_currency', $errors);
         $this->assertContains('vads_order_id', $errors);
 
-        $this->assertTrue((bool) $request->set('cust_city', 'Crimée'));
+        // check accented data
+        $result = (bool) $request->set('cust_city', 'Crimée');
+        $this->assertTrue($result);
         $this->assertSame('Crimée', $request->get('cust_city'));
 
+        // use encoding conversion
         $request = new Request('ISO-8859-15');
         $request->set('cust_state', utf8_decode('Crimée')); // pass ISO-8859-15 encoded data
-        $this->assertSame('Crimée', $request->get('cust_state'));
+        $this->assertSame('Crimée', $request->get('cust_state'), 'Data not correctly converted to UTF-8.');
     }
 
     public function testSetMultiPayment()
     {
         $request = new Request();
 
+        // check MULTI payment config with first payment amount
         $request->setMultiPayment(2536, 1000, 3, 30);
         $this->assertSame('MULTI:first=1000;count=3;period=30', $request->get('payment_config'));
         $this->assertEquals(2536, $request->get('amount'));
 
+        // check MULTI payment config with no first payment amount
         $request->setMultiPayment(2536, null, 4, 30);
         $this->assertSame('MULTI:first=634;count=4;period=30', $request->get('payment_config'));
         $this->assertEquals(2536, $request->get('amount'));
@@ -134,35 +139,36 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $form = $request->getRequestHtmlForm();
 
-        $this->assertContains('<form action="https://secure.payzen.eu/vads-payment/" method="POST" >', $form);
-        $this->assertContains('<input type="submit" value="Pay" />', $form);
-        $this->assertContains('<input name="signature" value="3ba916fbdd0081d186cc31462779aaac6aab1c82" type="hidden" />', $form);
+        $this->assertContains('<form action="https://secure.payzen.eu/vads-payment/" method="POST" >', $form, 'No form header generated.');
+        $this->assertContains('<input type="submit" value="Pay" />', $form, 'No form button generated.');
+        $this->assertContains('<input name="signature" value="3ba916fbdd0081d186cc31462779aaac6aab1c82" type="hidden" />', $form, 'No signature field generated.');
 
         $pattern = '#^<input name="vads_[a-z0-9]+(_[a-z0-9]+)*" value="[^<>]*" type="hidden" />$#m';
         $count = preg_match_all($pattern, $form);
-        $this->assertSame(38, $count);
+        $this->assertSame(38, $count, 'Some form fields are missing or invalid.');
 
         $fields = $request->getRequestFieldsArray();
         $this->assertCount(39, $fields);
-        $this->assertArrayHasKey('signature', $fields);
-        $this->assertEquals('3ba916fbdd0081d186cc31462779aaac6aab1c82', $fields['signature']);
+        $this->assertArrayHasKey('signature', $fields, 'Signature not found if fields array.');
+        $this->assertEquals('3ba916fbdd0081d186cc31462779aaac6aab1c82', $fields['signature'], 'Invalid signature generated.');
 
         foreach ($fields as $key => $value) {
             if ($key != 'signature') {
-                $this->assertRegExp('/vads_[a-z0-9]+(_[a-z0-9]+)*/', $key);
+                $this->assertRegExp('/vads_[a-z0-9]+(_[a-z0-9]+)*/', $key, "Invalid name for field $key.");
             }
         }
 
+        // check sensitive data masking
         $request->set('payment_cards', 'VISA');
         $request->set('card_number', '1111111111111111');
         $request->set('cvv', '111');
         $request->set('expiry_month', '03');
         $request->set('expiry_year', '2020');
 
-        $fields = $request->getRequestFieldsArray(true);
-        $this->assertEquals('****************', $fields['vads_card_number']);
-        $this->assertEquals('***', $fields['vads_cvv']);
-        $this->assertEquals('**', $fields['vads_expiry_month']);
-        $this->assertEquals('****', $fields['vads_expiry_year']);
+        $fields = $request->getRequestFieldsArray(true); // passed true to generate data for logging purpose
+        $this->assertEquals('****************', $fields['vads_card_number'], 'Card number not masked well.');
+        $this->assertEquals('***', $fields['vads_cvv'], 'CVV not masked well.');
+        $this->assertEquals('**', $fields['vads_expiry_month'], 'Expiry month not masked well.');
+        $this->assertEquals('****', $fields['vads_expiry_year'], 'Expiry year not masked well.');
     }
 }

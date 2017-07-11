@@ -126,23 +126,26 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticated()
     {
+        // check signature for accepted payment data
         $response = new Response(self::$acceptedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
 
-        $this->assertTrue($response->isAuthentified());
+        $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
         $this->assertSame(
             'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111',
             $response->getComputedSignature(false)
         );
 
+        // check signature for inconsistent data
         $inconsistentData = self::$acceptedPaymentData;
         $inconsistentData['vads_card_country'] = 'US';
 
         $response = new Response($inconsistentData, 'TEST', '1111111111111111', '2222222222222222');
-        $this->assertFalse($response->isAuthentified());
+        $this->assertFalse($response->isAuthentified(), 'Authentication must fail.');
 
+        // check signature for failed payment data
         $response = new Response(self::$failedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
-        $this->assertTrue($response->isAuthentified());
+        $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
     }
 
     public function testAcceptedPayment()
@@ -154,6 +157,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('AUTHORISED', $response->getTransStatus());
         $this->assertSame(25.25, $response->getFloatAmount());
 
+        // check payment result
         $this->assertEquals(array(
             'result' => '00',
             'extra_result' => '00',
@@ -161,6 +165,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'warranty_result' => 'YES'
         ), $response->getAllResults());
 
+        // check fraud controls
         $this->assertFalse($response->isSuspectedFraud());
 
         $riskControl = $response->getRiskControl();
@@ -180,6 +185,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('REFUSED', $response->getTransStatus());
         $this->assertSame(88.94, $response->getFloatAmount());
 
+        // check payment result
         $this->assertEquals(array(
             'result' => '05',
             'extra_result' => '00',
@@ -187,6 +193,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'warranty_result' => ''
         ), $response->getAllResults());
 
+        // check fraud controls
         $this->assertFalse($response->isSuspectedFraud());
 
         $riskControl = $response->getRiskControl();
@@ -198,7 +205,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testGetOutputForPlatform()
     {
         $response = new Response(self::$acceptedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
-        $response->setMerchantLanguage('en');
+        $response->setMerchantLanguage('en'); // responses will be translated to this language
 
         $msg = $response->getOutputForPlatform('payment_ok');
         $this->checkOutputFormat($msg, $response->get('trans_id'), true);
@@ -226,10 +233,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('<span style="display:none">', $output);
         $this->assertContains("\n" . '</span>', $output);
 
-        if ($success) {
-            $this->assertRegexp("#>OK\-$transId#", $output);
-        } else {
-            $this->assertRegexp("#>KO\-$transId#", $output);
-        }
+        $regexp = $success ? "#>OK\-$transId#" : "#>KO\-$transId#";
+        $this->assertRegexp($regexp, $output, 'Invalid output generated as response to IPN call.');
     }
 }

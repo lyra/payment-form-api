@@ -20,7 +20,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $time = strtotime('today 23:59:59');
         $id = Util::generateTransId($time);
-        $this->assertTrue((int) $id < 899999);
+        $this->assertTrue((int) $id < 899999, 'Generated transaction ID is out of range.');
     }
 
     public function testSupportedLanguages()
@@ -32,7 +32,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $keys = array_keys($languages);
         foreach ($keys as $key) {
-            $this->assertRegExp('/^[a-z]{2}$/', $key);
+            $this->assertRegExp('/^[a-z]{2}$/', $key, 'Invalid language ISO code.');
         }
 
         $this->assertTrue(Util::isSupportedLanguage('fr'));
@@ -50,6 +50,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
             $this->assertTrue(is_a($currency, '\Lyranetwork\Currency'));
         }
 
+        // check currency queries
         $any = $currencies[0];
 
         $currency1 = Util::findCurrencyByAlphaCode($any->getAlpha3());
@@ -59,7 +60,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($currency1->getNum(), $currency2->getNum());
         $this->assertEquals($currency1->getDecimals(), $currency2->getDecimals());
 
-        $this->assertNull(Util::findCurrencyByAlphaCode('CURRENCY'));
+        $this->assertNull(Util::findCurrencyByAlphaCode('CURRENCY'), 'No currency should be found for the passed code.');
 
         $num = Util::getCurrencyNumCode($any->getAlpha3());
         $this->assertEquals($any->getNum(), $num);
@@ -74,7 +75,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $keys = array_keys($means);
         foreach ($keys as $key) {
-            $this->assertRegExp('/^[A-Za-z0-9\-_]+$/', $key);
+            $this->assertRegExp('/^[A-Za-z0-9\-_]+$/', $key, 'Invalid payment means code.');
         }
     }
 
@@ -130,7 +131,8 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111',
-            Util::sign($params, $key, false)
+            Util::sign($params, $key, false),
+            'Invalid signature string computed.'
         );
 
         $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, true));
