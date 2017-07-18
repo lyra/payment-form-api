@@ -1,4 +1,4 @@
-# Contributing to Lyra payment form API code
+# Contributing to Lyra payment form API
 
 Anyone is welcome to contribute to Lyra payment form API. There are various ways you can contribute:
 
