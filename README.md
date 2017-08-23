@@ -7,7 +7,7 @@ Lyra payment form API is an open source PHP SDK that allows integration of secur
 PHP 5.3.0 and later.
 
 ## Installation
- 
+
 ### Composer 
 
 You can install the API via [Composer](http://getcomposer.org/). Run the following command:
