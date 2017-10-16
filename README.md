@@ -1,6 +1,6 @@
-# Lyra payment form API
+# Lyra payment form SDK
 
-Lyra payment form API is an open source PHP SDK that allows integration of secured payment gateway developped by [Lyra Network](https://www.lyra-network.com/) inside e-commerce websites.
+Lyra payment form SDK is an open source PHP SDK that allows integration of secured payment gateway developped by [Lyra Network](https://www.lyra-network.com/) inside e-commerce websites.
 
 ## Requirements
 
@@ -86,6 +86,6 @@ if ($response->isAcceptedPayment()) {
 
 ## License
 
-Each Lyra payment form API source file included in this distribution is licensed under GNU GENERAL PUBLIC LICENSE (GPL 3.0).
+Each Lyra payment form SDK source file included in this distribution is licensed under GNU GENERAL PUBLIC LICENSE (GPL 3.0).
 
 Please see LICENSE.txt for the full text of the GPL 3.0 license. It is also available through the world-wide-web at this URL: http://www.gnu.org/licenses/.

@@ -5,7 +5,7 @@
          verbose="true">
 
     <testsuites>
-        <testsuite name="Lyra payment form API Test Suite">
+        <testsuite name="Lyra payment form SDK Test Suite">
             <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">tests</directory>
         </testsuite>
     </testsuites>

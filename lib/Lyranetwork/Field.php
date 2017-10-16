@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Lyra payment form API.
+ * This file is part of Lyra payment form SDK.
  * Copyright (C) Lyra Network.
  * See COPYING.txt for license details.
  */
@@ -90,8 +90,7 @@ class Field
     public function setValue($value)
     {
         $value = ($value === null) ? null : (string) $value;
-        // we save value even if invalid but we return "false" as warning
-        $this->value = $value;
+        $this->value = $value; // we save value even if invalid but we return "false" as warning
 
         return $this->isValid();
     }
