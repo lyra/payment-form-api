@@ -512,12 +512,12 @@ class Response
     {
         global $i18n;
 
-        if (! is_file(dirname(__FILE__) . '/i18n/' . $lang . '/messages.php')) {
+        if (! is_file(dirname(__FILE__) . "/i18n/messages.$lang.php")) {
             // by default, load english translations
             $lang = 'en';
         }
 
-        include_once dirname(__FILE__) . '/i18n/' . $lang . '/messages.php';
+        include_once dirname(__FILE__) . "/i18n/messages.$lang.php";
 
         $text = Util::findInArray($result ? $result : 'empty', $i18n[$result_type], $i18n['unknown']);
 
