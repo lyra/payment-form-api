@@ -1,7 +1,7 @@
 {
-    "name": "lyranetwork/plugin-form-api",
-    "description": "Common API to make Lyra payment platform integration easier in PHP based websites",
-    "version": "2.0.0",
+    "name": "lyranetwork/payment-form-api",
+    "description": "Common API to make Lyra payment platform integration easier in PHP based websites.",
+    "version": "3.0.0",
     "type": "library",
     "keywords": ["api", "sdk", "php", "payment", "e-commerce", "lyra"],
     "license": "GPL-3.0+",

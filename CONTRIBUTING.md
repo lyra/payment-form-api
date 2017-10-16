@@ -1,6 +1,6 @@
-# Contributing to Lyra payment form SDK
+# Contributing to Lyra payment form API
 
-Anyone is welcome to contribute to Lyra payment form SDK. There are various ways you can contribute:
+Anyone is welcome to contribute to Lyra payment form API. There are various ways you can contribute:
 
 - Raise an issue on GitHub.
 - Send us a Pull Request with your bug fixes.

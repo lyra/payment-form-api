@@ -1,6 +1,6 @@
-# Lyra payment form SDK
+# Lyra payment form API
 
-Lyra payment form SDK is an open source PHP SDK that allows integration of secured payment gateway developped by [Lyra Network](https://www.lyra-network.com/) inside e-commerce websites.
+Lyra payment form API is an open source PHP SDK that allows integration of secured payment gateway developped by [Lyra Network](https://www.lyra-network.com/) inside e-commerce websites.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ PHP 5.3.0 and later.
 You can install the API via [Composer](http://getcomposer.org/). Run the following command:
 
 ```bash
-composer require lyranetwork/plugin-form-api
+composer require lyranetwork/payment-form-api
 ```
 
 To use the API, use Composer's [autoload](https://getcomposer.org/doc/00-intro.md#autoloading):
@@ -24,10 +24,10 @@ require_once('vendor/autoload.php');
 
 ### Manual Installation
 
-If you do not wish to use Composer, you can download the [latest release](https://github.com/payzen/plugin-form-api/releases). Then, to use the API, include the `init.php` file.
+If you do not wish to use Composer, you can download the [latest release](https://github.com/payzen/payment-form-api/releases). Then, to use the API, include the `init.php` file.
 
 ```php
-require_once('/path/to/plugin-form-api/init.php');
+require_once('/path/to/payment-form-api/init.php');
 ```
 
 ## Usage
@@ -86,6 +86,6 @@ if ($response->isAcceptedPayment()) {
 
 ## License
 
-Each Lyra payment form SDK source file included in this distribution is licensed under GNU GENERAL PUBLIC LICENSE (GPL 3.0).
+Each Lyra payment form API source file included in this distribution is licensed under GNU GENERAL PUBLIC LICENSE (GPL 3.0).
 
 Please see LICENSE.txt for the full text of the GPL 3.0 license. It is also available through the world-wide-web at this URL: http://www.gnu.org/licenses/.

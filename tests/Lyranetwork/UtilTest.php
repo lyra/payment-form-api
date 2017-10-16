@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Lyra payment form SDK.
+ * This file is part of Lyra payment form API.
  * Copyright (C) Lyra Network.
  * See COPYING.txt for license details.
  */
