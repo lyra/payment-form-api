@@ -93,10 +93,11 @@ class Response
      * Prepare to analyse IPN URL or return URL call.
      *
      * @param array[string][string] $params
+     * @param string $ctx_mode
      * @param string $key_test
      * @param string $key_prod
      */
-    public function __construct($params, $key_test, $key_prod)
+    public function __construct($params, $ctx_mode, $key_test, $key_prod)
     {
         $this->rawResponse = Util::uncharm($params);
         $this->certificate = $ctx_mode == 'PRODUCTION' ? $key_prod : $key_test;

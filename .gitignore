@@ -1,4 +1,7 @@
 .project
 .buildpath
+/.settings/
+**/build/
+**/archives/
+**/compils/
 **/local.properties
-/compils/
