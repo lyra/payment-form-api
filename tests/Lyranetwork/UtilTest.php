@@ -131,12 +131,21 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111',
-            Util::sign($params, $key, false),
+            Util::sign($params, $key, Util::ALGO_SHA1, false),
             'Invalid signature string computed.'
         );
 
-        $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, true));
-        $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key));
+        $this->assertEquals(
+            'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111',
+            Util::sign($params, $key, Util::ALGO_SHA256, false),
+            'Invalid signature string computed.'
+        );
+
+        $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1, true));
+        $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256, true));
+
+        $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1));
+        $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256));
     }
 
     public function testFindInArray()

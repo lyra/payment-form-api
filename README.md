@@ -38,11 +38,14 @@ To create payment form do :
 $ctxMode = 'TEST';
 $keyTest = '1111111111111111';
 $keyProd = '2222222222222222';
+$algo = 'SHA-1';
 
 $request = new \Lyranetwork\Request();
 $request->set('ctx_mode', $ctxMode);
 $request->set('key_test', $keyTest);
 $request->set('key_prod', $keyProd);
+$request->set('sign_algo', $algo);
+
 
 $request->set('site_id', '12345678');
 $request->set('amount', '100'); // amount in cents
@@ -56,11 +59,11 @@ echo $request->getRequestHtmlForm();
 To process payment result, do : 
 
 ```php
-$ctx_mode = 'TEST';
 $keyTest = '1111111111111111';
 $keyProd = '2222222222222222';
+$algo = 'SHA-1';
 
-$response = new \LyraNetwork\Response($_REQUEST, $ctxMode, $keyTest, $keyProd);
+$response = new \LyraNetwork\Response($_REQUEST, $keyTest, $keyProd, $algo);
 
 if (! $response->isAuthentified()) {
     // Unauthenticated response received

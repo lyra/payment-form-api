@@ -13,15 +13,10 @@ class Response
 {
 
     const TYPE_RESULT = 'result';
-
     const TYPE_AUTH_RESULT = 'auth_result';
-
     const TYPE_WARRANTY_RESULT = 'warranty_result';
-
     const TYPE_RISK_CONTROL = 'risk_control';
-
     const TYPE_RISK_ASSESSMENT = 'risk_assessment';
-
     const TYPE_IPN_RESPONSE = 'ipn_response';
 
     /**
@@ -38,6 +33,14 @@ class Response
      * @var string
      */
     private $certificate;
+
+    /**
+     * Algorithm used to check the signature.
+     *
+     * @see Util::sign
+     * @var string
+     */
+    private $algo;
 
     /**
      * Value of vads_result.
@@ -89,18 +92,18 @@ class Response
     private $merchantLanguage = 'en';
 
     /**
-     * Constructor for Response class.
-     * Prepare to analyse IPN URL or return URL call.
+     * Constructor for Response class. Prepare to analyse IPN URL or return URL call.
      *
      * @param array[string][string] $params
-     * @param string $ctx_mode
      * @param string $key_test
      * @param string $key_prod
+     * @param string $algo
      */
-    public function __construct($params, $ctx_mode, $key_test, $key_prod)
+    public function __construct($params, $key_test, $key_prod, $algo = Util::ALGO_SHA1)
     {
         $this->rawResponse = Util::uncharm($params);
-        $this->certificate = $ctx_mode == 'PRODUCTION' ? $key_prod : $key_test;
+        $this->certificate = $this->get('ctx_mode') == 'PRODUCTION' ? $key_prod : $key_test;
+        $this->algo = $algo;
 
         // payment results
         $this->result = Util::findInArray('vads_result', $this->rawResponse, null);
@@ -119,9 +122,7 @@ class Response
      */
     public function setOriginalEncoding($encoding)
     {
-        if (in_array(strtoupper($encoding), Util::$SUPPORTED_ENCODINGS)) {
-            $this->originalEncoding =  strtoupper($encoding);
-        }
+        $this->originalEncoding = Util::useEncoding($encoding);
 
         return $this;
     }
@@ -157,7 +158,7 @@ class Response
      */
     public function getComputedSignature($hashed = true)
     {
-        return Util::sign($this->rawResponse, $this->certificate, $hashed);
+        return Util::sign($this->rawResponse, $this->certificate, $this->algo, $hashed);
     }
 
     /**

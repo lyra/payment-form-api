@@ -147,7 +147,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $count = preg_match_all($pattern, $form);
         $this->assertSame(38, $count, 'Some form fields are missing or invalid.');
 
-        $fields = $request->getRequestFieldsArray();
+        $fields = $request->getRequestArrayFields();
         $this->assertCount(39, $fields);
         $this->assertArrayHasKey('signature', $fields, 'Signature not found if fields array.');
         $this->assertEquals('3ba916fbdd0081d186cc31462779aaac6aab1c82', $fields['signature'], 'Invalid signature generated.');
@@ -165,7 +165,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request->set('expiry_month', '03');
         $request->set('expiry_year', '2020');
 
-        $fields = $request->getRequestFieldsArray(true); // passed true to generate data for logging purpose
+        $fields = $request->getRequestArrayFields(true); // passed true to generate data for logging purpose
         $this->assertEquals('****************', $fields['vads_card_number'], 'Card number not masked well.');
         $this->assertEquals('***', $fields['vads_cvv'], 'CVV not masked well.');
         $this->assertEquals('**', $fields['vads_expiry_month'], 'Expiry month not masked well.');

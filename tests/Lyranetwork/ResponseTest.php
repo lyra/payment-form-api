@@ -124,10 +124,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAuthenticated()
+    public function testAuthenticatedSha1()
     {
         // check signature for accepted payment data
-        $response = new Response(self::$acceptedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222', Util::ALGO_SHA1);
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
@@ -140,17 +140,46 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $inconsistentData = self::$acceptedPaymentData;
         $inconsistentData['vads_card_country'] = 'US';
 
-        $response = new Response($inconsistentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response($inconsistentData, '1111111111111111', '2222222222222222', Util::ALGO_SHA1);
         $this->assertFalse($response->isAuthentified(), 'Authentication must fail.');
 
         // check signature for failed payment data
-        $response = new Response(self::$failedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response(self::$failedPaymentData, '1111111111111111', '2222222222222222', Util::ALGO_SHA1);
+        $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
+    }
+
+    public function testAuthenticatedSha256()
+    {
+        // check signature for accepted payment data
+        $sha256Data = self::$acceptedPaymentData;
+        $sha256Data['signature'] = '9sopoUOXohjFBpy3nKIxNSp+gQLESOG/P1P+voDIPkA=';
+        $response = new Response($sha256Data, '1111111111111111', '2222222222222222', Util::ALGO_SHA256);
+
+        $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
+
+        $this->assertSame(
+            'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111',
+            $response->getComputedSignature(false)
+        );
+
+        // check signature for inconsistent data
+        $inconsistentData = $sha256Data;
+        $inconsistentData['vads_card_country'] = 'US';
+
+        $response = new Response($inconsistentData, '1111111111111111', '2222222222222222', Util::ALGO_SHA256);
+        $this->assertFalse($response->isAuthentified(), 'Authentication must fail.');
+
+        // check signature for failed payment data
+        $sha256Data = self::$failedPaymentData;
+        $sha256Data['signature'] = 'lBC3GGHikARqYXEXeClLrVieu1Xfwrn9a41otIRt52w=';
+
+        $response = new Response($sha256Data, '1111111111111111', '2222222222222222', Util::ALGO_SHA256);
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
     }
 
     public function testAcceptedPayment()
     {
-        $response = new Response(self::$acceptedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222');
 
         $this->assertTrue($response->isAcceptedPayment());
         $this->assertFalse($response->isPendingPayment());
@@ -204,7 +233,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOutputForPlatform()
     {
-        $response = new Response(self::$acceptedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222');
         $response->setMerchantLanguage('en'); // responses will be translated to this language
 
         $msg = $response->getOutputForPlatform('payment_ok');

@@ -34,6 +34,14 @@ class Request
     private $keyProd;
 
     /**
+     * Algo used to sign forms.
+     *
+     * @var string
+     * @access private
+     */
+    private $algo = Util::ALGO_SHA1;
+
+    /**
      * URL of the payment page.
      *
      * @var string
@@ -46,13 +54,6 @@ class Request
      * @var boolean
      */
     private $redirectEnabled;
-
-    /**
-     * SHA-1 authentication signature.
-     *
-     * @var string
-     */
-    private $signature;
 
     /**
      * The original data encoding.
@@ -87,7 +88,7 @@ class Request
     public function __construct($encoding = 'UTF-8')
     {
         // initialize encoding
-        $this->encoding = in_array(strtoupper($encoding), Util::$SUPPORTED_ENCODINGS) ? strtoupper($encoding) : 'UTF-8';
+        $this->encoding = Util::useEncoding($encoding);
 
         // parameters' regular expressions
         $ans = '[^<>]'; // Any character (except the dreadful "<" and ">")
@@ -102,7 +103,7 @@ class Request
         $regex_params = '#^([^&=]+=[^&=]*)?(&[^&=]+=[^&=]*)*$#u'; // name1=value1&name2=value2...
         $regex_ship_type = '#^RECLAIM_IN_SHOP|RELAY_POINT|RECLAIM_IN_STATION|PACKAGE_DELIVERY_COMPANY|ETICKET$#u';
 
-        // defining all parameters and setting formats and default values
+        // defining all parameters and setting formats
         $this->addField('signature', 'Signature', '#^[0-9a-f]{40}$#u', true);
 
         $this->addField('vads_action_mode', 'Action mode', '#^INTERACTIVE|SILENT$#u', true);
@@ -200,7 +201,7 @@ class Request
     }
 
     /**
-     * Shortcut function used in constructor to build requestParameters.
+     * Shortcut function used in constructor to build request parameters.
      *
      * @param string $name
      * @param string $label
@@ -221,22 +222,6 @@ class Request
     }
 
     /**
-     * Shortcut for setting multiple values with one array.
-     *
-     * @param array[string][mixed] $parameters
-     * @return boolean
-     */
-    public function setFromArray($parameters)
-    {
-        $ok = true;
-        foreach ($parameters as $name => $value) {
-            $ok &= $this->set($name, $value);
-        }
-
-        return $ok;
-    }
-
-    /**
      * General getter that retrieves a request parameter with its name.
      * Adds "vads_" to the name if necessary.
      * Example : <code>$site_id = $request->get('site_id');</code>
@@ -253,11 +238,7 @@ class Request
         // shortcut notation compatibility
         $name = (substr($name, 0, 5) != 'vads_') ? 'vads_' . $name : $name;
 
-        if ($name == 'vads_key_test') {
-            return $this->keyTest;
-        } elseif ($name == 'vads_key_prod') {
-            return $this->keyProd;
-        } elseif ($name == 'vads_platform_url') {
+        if ($name == 'vads_platform_url') {
             return $this->platformUrl;
         } elseif ($name == 'vads_redirect_enabled') {
             return $this->redirectEnabled;
@@ -265,6 +246,35 @@ class Request
             return $this->requestParameters[$name]->getValue();
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Get platform URL.
+     *
+     * @return string
+     */
+    public function getPlatformUrl()
+    {
+        return $this->platformUrl;
+    }
+
+    /**
+     * Return certificate according to current mode, false if mode was not set.
+     *
+     * @return string|boolean
+     */
+    private function getCertificate()
+    {
+        switch ($this->requestParameters['vads_ctx_mode']->getValue()) {
+            case 'TEST':
+                return $this->keyTest;
+
+            case 'PRODUCTION':
+                return $this->keyProd;
+
+            default:
+                return false;
         }
     }
 
@@ -314,11 +324,29 @@ class Request
             return $this->setPlatformUrl($value);
         } elseif ($name == 'vads_redirect_enabled') {
             return $this->setRedirectEnabled($value);
+        } elseif ($name == 'vads_sign_algo') {
+            return $this->setSignAlgo($value);
         } elseif (key_exists($name, $this->requestParameters)) {
             return $this->requestParameters[$name]->setValue($value);
         } else {
             return false;
         }
+    }
+
+    /**
+     * Shortcut for setting multiple values with one array.
+     *
+     * @param array[string][mixed] $parameters
+     * @return boolean
+     */
+    public function setFromArray($parameters)
+    {
+        $ok = true;
+        foreach ($parameters as $name => $value) {
+            $ok &= $this->set($name, $value);
+        }
+
+        return $ok;
     }
 
     /**
@@ -341,7 +369,7 @@ class Request
 
             // check parameters
             if (is_numeric($total_in_cents) && $total_in_cents > $first_in_cents && $total_in_cents > 0 &&
-                 is_numeric($first_in_cents) && $first_in_cents > 0) {
+                is_numeric($first_in_cents) && $first_in_cents > 0) {
 
                 // set value to payment_config
                 $payment_config = 'MULTI:first=' . $first_in_cents . ';count=' . $count . ';period=' . $period;
@@ -370,10 +398,9 @@ class Request
     }
 
     /**
-     * Enable/disable vads_redirect_* parameters.
+     * Enable/disable vads_redirect_* parameters. Use false, 0, null, negative integer or 'false' to disable redirect.
      *
      * @param mixed $enabled
-     *            false, 0, null, negative integer or 'false' to disable
      * @return boolean
      */
     public function setRedirectEnabled($enabled)
@@ -400,6 +427,22 @@ class Request
         }
 
         return true;
+    }
+
+    /**
+     * Set signature algorithm.
+     *
+     * @param string $algo
+     * @return boolean
+     */
+    public function setSignAlgo($algo)
+    {
+        if (in_array($algo, Util::$SUPPORTED_ALGOS)) {
+            $this->algo = $algo;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -444,44 +487,20 @@ class Request
     }
 
     /**
-     * Return certificate according to current mode, false if mode was not set.
-     *
-     * @return string|boolean
-     */
-    public function getCertificate()
-    {
-        switch ($this->requestParameters['vads_ctx_mode']->getValue()) {
-            case 'TEST':
-                return $this->keyTest;
-
-            case 'PRODUCTION':
-                return $this->keyProd;
-
-            default:
-                return false;
-        }
-    }
-
-    /**
      * Generate signature from a list of Field.
      *
      * @param array[string][Field] $fields
+     * @param bool $hashed
      * @return string
      */
-    private function generateSignature($fields = null, $hashed = true)
+    private function generateSignature($fields, $hashed = true)
     {
-        if (! is_array($fields)) {
-            $fields = $this->requestParameters;
-        }
-
         $params = array();
         foreach ($fields as $field) {
-            if ($field->isRequired() || $field->isFilled()) {
-                $params[$field->getName()] = $field->getValue();
-            }
+            $params[$field->getName()] = $field->getValue();
         }
 
-        return Util::sign($params, $this->getCertificate(), $hashed);
+        return Util::sign($params, $this->getCertificate(), $this->algo, $hashed);
     }
 
     /**
@@ -519,7 +538,7 @@ class Request
     /**
      * Return the list of fields to send to the payment platform.
      *
-     * @return array[string][Field] a list of Field
+     * @return array[string][Field]
      */
     public function getRequestFields()
     {
@@ -629,7 +648,7 @@ class Request
      * @param bool $escape
      * @return array[string][string]
      */
-    public function getRequestFieldsArray($for_log = false, $escape = true)
+    public function getRequestArrayFields($for_log = false, $escape = true)
     {
         $fields = $this->getRequestFields();
 

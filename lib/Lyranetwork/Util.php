@@ -11,6 +11,15 @@ namespace Lyranetwork;
  */
 class Util
 {
+    const ALGO_SHA1 = 'SHA-1';
+    const ALGO_SHA256 = 'SHA-256';
+
+    /**
+     * The list of signature algorithms supported by the API.
+     *
+     * @var array[string]
+     */
+    public static $SUPPORTED_ALGOS = array(self::ALGO_SHA1, self::ALGO_SHA256);
 
     /**
      * The list of encodings supported by the API.
@@ -213,10 +222,11 @@ class Util
      *
      * @param array[string][string] $parameters
      * @param string $key
+     * @param string $algo
      * @param boolean $hashed
      * @return string
      */
-    public static function sign($parameters, $key, $hashed = true)
+    public static function sign($parameters, $key, $algo, $hashed = true)
     {
         ksort($parameters);
 
@@ -228,7 +238,19 @@ class Util
         }
 
         $sign .= $key;
-        return $hashed ? sha1($sign) : $sign;
+
+        if (! $hashed) {
+            return $sign;
+        }
+
+        switch ($algo) {
+            case self::ALGO_SHA1:
+                return sha1($sign);
+            case self::ALGO_SHA256:
+                return base64_encode(hash_hmac('sha256', $sign, $key, true));
+            default:
+                throw new \InvalidArgumentException("Unsupported algorithm passed : {$algo}.");
+        }
     }
 
     /**
@@ -254,6 +276,14 @@ class Util
         return $sane;
     }
 
+    /**
+     * Find element by $key in $array. Return $default if element is not found.
+     *
+     * @param int|string $key
+     * @param array[int|string][mixed] $array
+     * @param mixed $default
+     * @return mixed
+     */
     public static function findInArray($key, $array, $default)
     {
         if (is_array($array) && key_exists($key, $array)) {
@@ -261,5 +291,26 @@ class Util
         }
 
         return $default;
+    }
+
+    /**
+     * Return encoding to use. Return UTF-8 if entered enconding is not supported.
+     *
+     * @param string $encoding
+     * @return string
+     */
+    public static function useEncoding($encoding)
+    {
+        $result = $encoding;
+
+        if (is_string($result)) {
+            $result = strtoupper($result);
+
+            if (in_array($result, self::$SUPPORTED_ENCODINGS)) {
+                return $result;
+            }
+        }
+
+        return 'UTF-8';
     }
 }
