@@ -2,12 +2,11 @@
 /**
  * Copyright (C) 2017 Lyra Network.
  * This file is part of Lyra payment form API.
- *
  * See COPYING.txt for license details.
  *
- * @author    Lyra Network <contact@lyra-network.com>
+ * @author Lyra Network <contact@lyra-network.com>
  * @copyright 2017 Lyra Network
- * @license   http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
 
@@ -18,10 +17,15 @@ class Response
 {
 
     const TYPE_RESULT = 'result';
+
     const TYPE_AUTH_RESULT = 'auth_result';
+
     const TYPE_WARRANTY_RESULT = 'warranty_result';
+
     const TYPE_RISK_CONTROL = 'risk_control';
+
     const TYPE_RISK_ASSESSMENT = 'risk_assessment';
+
     const TYPE_IPN_RESPONSE = 'ipn_response';
 
     /**
@@ -97,7 +101,8 @@ class Response
     private $merchantLanguage = 'en';
 
     /**
-     * Constructor for Response class. Prepare to analyse IPN URL or return URL call.
+     * Constructor for Response class.
+     * Prepare to analyse IPN URL or return URL call.
      *
      * @param array[string][string] $params
      * @param string $key_test
@@ -120,7 +125,8 @@ class Response
     }
 
     /**
-     * Set website original encoding. If passed encoding is not recognized by API, UTF-8 is used.
+     * Set website original encoding.
+     * If passed encoding is not recognized by API, UTF-8 is used.
      *
      * @param string $encoding
      * @return Response

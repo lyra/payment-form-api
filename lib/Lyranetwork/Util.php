@@ -2,12 +2,11 @@
 /**
  * Copyright (C) 2017 Lyra Network.
  * This file is part of Lyra payment form API.
- *
  * See COPYING.txt for license details.
  *
- * @author    Lyra Network <contact@lyra-network.com>
+ * @author Lyra Network <contact@lyra-network.com>
  * @copyright 2017 Lyra Network
- * @license   http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
 
@@ -16,7 +15,9 @@ namespace Lyranetwork;
  */
 class Util
 {
+
     const ALGO_SHA1 = 'SHA-1';
+
     const ALGO_SHA256 = 'SHA-256';
 
     /**
@@ -24,7 +25,10 @@ class Util
      *
      * @var array[string]
      */
-    public static $SUPPORTED_ALGOS = array(self::ALGO_SHA1, self::ALGO_SHA256);
+    public static $SUPPORTED_ALGOS = array(
+        self::ALGO_SHA1,
+        self::ALGO_SHA256
+    );
 
     /**
      * The list of encodings supported by the API.
@@ -117,11 +121,8 @@ class Util
 
             $xml = simplexml_load_file(__DIR__ . '/config/currencies.xml');
             foreach ($xml->currency as $currency) {
-                self::$cache['currencies'][] = new Currency(
-                    (string) $currency['alpha3'],
-                    (string) $currency['num'],
-                    (string) $currency['decimals']
-                );
+                self::$cache['currencies'][] = new Currency((string) $currency['alpha3'], (string) $currency['num'],
+                    (string) $currency['decimals']);
             }
         }
 
@@ -138,7 +139,7 @@ class Util
     {
         $list = self::getSupportedCurrencies();
         foreach ($list as $currency) {
-            /**
+            /*
              * @var Currency $currency
              */
             if ($currency->getAlpha3() == $alpha3) {
@@ -159,7 +160,7 @@ class Util
     {
         $list = self::getSupportedCurrencies();
         foreach ($list as $currency) {
-            /**
+            /*
              * @var Currency $currency
              */
             if ($currency->getNum() == $numeric) {
@@ -180,7 +181,7 @@ class Util
     {
         $list = self::getSupportedCurrencies();
         foreach ($list as $currency) {
-            /**
+            /*
              * @var Currency $currency
              */
             if ($currency->getNum() == $code || $currency->getAlpha3() == $code) {
@@ -223,7 +224,8 @@ class Util
     }
 
     /**
-     * Compute payment signature. Parameters must be in UTF-8.
+     * Compute payment signature.
+     * Parameters must be in UTF-8.
      *
      * @param array[string][string] $parameters
      * @param string $key
@@ -282,7 +284,8 @@ class Util
     }
 
     /**
-     * Find element by $key in $array. Return $default if element is not found.
+     * Find element by $key in $array.
+     * Return $default if element is not found.
      *
      * @param int|string $key
      * @param array[int|string][mixed] $array
@@ -299,7 +302,8 @@ class Util
     }
 
     /**
-     * Return encoding to use. Return UTF-8 if entered enconding is not supported.
+     * Return encoding to use.
+     * Return UTF-8 if entered enconding is not supported.
      *
      * @param string $encoding
      * @return string

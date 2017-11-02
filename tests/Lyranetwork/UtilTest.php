@@ -2,22 +2,22 @@
 /**
  * Copyright (C) 2017 Lyra Network.
  * This file is part of Lyra payment form API.
- *
  * See COPYING.txt for license details.
  *
- * @author    Lyra Network <contact@lyra-network.com>
+ * @author Lyra Network <contact@lyra-network.com>
  * @copyright 2017 Lyra Network
- * @license   http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
 
 class UtilTest extends \PHPUnit\Framework\TestCase
 {
+
     public function testGenerateTransId()
     {
         $id = Util::generateTransId();
         $this->assertEquals(6, strlen($id), 'Generated transaction ID has more or less than 6 characters.');
-        $this->assertTrue(is_numeric($id), 'Not numeric transaction ID generated.' );
+        $this->assertTrue(is_numeric($id), 'Not numeric transaction ID generated.');
 
         $time = strtotime('midnight');
         $id = Util::generateTransId($time);
@@ -133,21 +133,17 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         );
 
         $key = '1111111111111111';
+        $expected = 'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111';
 
-        $this->assertEquals(
-            'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111',
-            Util::sign($params, $key, Util::ALGO_SHA1, false),
-            'Invalid signature string computed.'
-        );
+        $this->assertEquals($expected, Util::sign($params, $key, Util::ALGO_SHA1, false),
+            'Invalid signature string computed.');
 
-        $this->assertEquals(
-            'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111',
-            Util::sign($params, $key, Util::ALGO_SHA256, false),
-            'Invalid signature string computed.'
-        );
+        $this->assertEquals($expected, Util::sign($params, $key, Util::ALGO_SHA256, false),
+            'Invalid signature string computed.');
 
         $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1, true));
-        $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256, true));
+        $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=',
+            Util::sign($params, $key, Util::ALGO_SHA256, true));
 
         $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1));
         $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256));

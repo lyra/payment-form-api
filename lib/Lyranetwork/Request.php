@@ -2,12 +2,11 @@
 /**
  * Copyright (C) 2017 Lyra Network.
  * This file is part of Lyra payment form API.
- *
  * See COPYING.txt for license details.
  *
- * @author    Lyra Network <contact@lyra-network.com>
+ * @author Lyra Network <contact@lyra-network.com>
  * @copyright 2017 Lyra Network
- * @license   http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
 
@@ -374,7 +373,7 @@ class Request
 
             // check parameters
             if (is_numeric($total_in_cents) && $total_in_cents > $first_in_cents && $total_in_cents > 0 &&
-                is_numeric($first_in_cents) && $first_in_cents > 0) {
+                 is_numeric($first_in_cents) && $first_in_cents > 0) {
 
                 // set value to payment_config
                 $payment_config = 'MULTI:first=' . $first_in_cents . ';count=' . $count . ';period=' . $period;
@@ -403,7 +402,8 @@ class Request
     }
 
     /**
-     * Enable/disable vads_redirect_* parameters. Use false, 0, null, negative integer or 'false' to disable redirect.
+     * Enable/disable vads_redirect_* parameters.
+     * Use false, 0, null, negative integer or 'false' to disable redirect.
      *
      * @param mixed $enabled
      * @return boolean
@@ -606,8 +606,8 @@ class Request
      * @param bool $escape
      * @return string
      */
-    public function getRequestHtmlForm($form_add = '', $input_type = 'hidden', $input_add = '', $btn_type = 'submit',
-        $btn_value = 'Pay', $btn_add = '', $escape = true)
+    public function getRequestHtmlForm($form_add = '', $input_type = 'hidden', $input_add = '', $btn_type = 'submit', $btn_value = 'Pay',
+        $btn_add = '', $escape = true)
     {
         $html = '';
         $html .= '<form action="' . $this->platformUrl . '" method="POST" ' . $form_add . '>';

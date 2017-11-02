@@ -2,18 +2,19 @@
 /**
  * Copyright (C) 2017 Lyra Network.
  * This file is part of Lyra payment form API.
- *
  * See COPYING.txt for license details.
  *
- * @author    Lyra Network <contact@lyra-network.com>
+ * @author Lyra Network <contact@lyra-network.com>
  * @copyright 2017 Lyra Network
- * @license   http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
+
     private static $acceptedPaymentData;
+
     private static $failedPaymentData;
 
     public static function setUpBeforeClass()
@@ -136,10 +137,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $this->assertSame(
-            'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111',
-            $response->getComputedSignature(false)
-        );
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data
         $inconsistentData = self::$acceptedPaymentData;
@@ -162,10 +161,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $this->assertSame(
-            'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111',
-            $response->getComputedSignature(false)
-        );
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data
         $inconsistentData = $sha256Data;
@@ -192,12 +189,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(25.25, $response->getFloatAmount());
 
         // check payment result
-        $this->assertEquals(array(
+        $results = array(
             'result' => '00',
             'extra_result' => '00',
             'auth_result' => '00',
             'warranty_result' => 'YES'
-        ), $response->getAllResults());
+        );
+        $this->assertEquals($results, $response->getAllResults());
 
         // check fraud controls
         $this->assertFalse($response->isSuspectedFraud());
@@ -220,12 +218,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(88.94, $response->getFloatAmount());
 
         // check payment result
-        $this->assertEquals(array(
+        $results = array(
             'result' => '05',
             'extra_result' => '00',
             'auth_result' => '05',
             'warranty_result' => ''
-        ), $response->getAllResults());
+        );
+        $this->assertEquals($results, $response->getAllResults());
 
         // check fraud controls
         $this->assertFalse($response->isSuspectedFraud());
