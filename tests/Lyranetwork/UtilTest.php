@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright (C) 2017 Lyra Network.
+ * Copyright (C) 2017-2018 Lyra Network.
  * This file is part of Lyra payment form API.
- * See COPYING.txt for license details.
+ * See COPYING.md for license details.
  *
  * @author Lyra Network <contact@lyra-network.com>
- * @copyright 2017 Lyra Network
+ * @copyright 2017-2018 Lyra Network
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
@@ -103,7 +103,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
             'vads_cust_last_name' => 'Lyra',
             'vads_cust_phone' => '0787878787',
             'vads_cust_title' => 'M',
-            'vads_trans_date' => '20170626132245',
+            'vads_trans_date' => '2017-20180626132245',
             'vads_trans_id' => '553658',
             'vads_url_return' => 'http://www.mysite.com/return',
             'vads_validation_mode' => '',
@@ -133,7 +133,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         );
 
         $key = '1111111111111111';
-        $expected = 'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111';
+        $expected = 'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+2017-20180626132245+553658+http://www.mysite.com/return++V2+1111111111111111';
 
         $this->assertEquals($expected, Util::sign($params, $key, Util::ALGO_SHA1, false),
             'Invalid signature string computed.');

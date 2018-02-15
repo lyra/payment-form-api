@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright (C) 2017 Lyra Network.
+ * Copyright (C) 2017-2018 Lyra Network.
  * This file is part of Lyra payment form API.
- * See COPYING.txt for license details.
+ * See COPYING.md for license details.
  *
  * @author Lyra Network <contact@lyra-network.com>
- * @copyright 2017 Lyra Network
+ * @copyright 2017-2018 Lyra Network
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL v3)
  */
 namespace Lyranetwork;
@@ -54,13 +54,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_result' => '00',
             'vads_trans_uuid' => 'a450413f9ec04fcc9c11b9f3b2103c2c',
             'vads_bank_product' => 'A',
-            'vads_trans_date' => '20170705073243',
+            'vads_trans_date' => '2017-20180705073243',
             'vads_ctx_mode' => 'TEST',
             'vads_action_mode' => 'INTERACTIVE',
             'vads_threeds_status' => '',
             'vads_effective_amount' => '2525',
             'vads_version' => 'V2',
-            'vads_presentation_date' => '20170705073311',
+            'vads_presentation_date' => '2017-20180705073311',
             'vads_trans_status' => 'AUTHORISED',
             'vads_pays_ip' => 'FR',
             'vads_trans_id' => '000730',
@@ -70,7 +70,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_threeds_exit_status' => '7',
             'vads_card_country' => 'FR',
             'vads_amount' => '2525',
-            'vads_effective_creation_date' => '20170705073311',
+            'vads_effective_creation_date' => '2017-20180705073311',
             'vads_site_id' => '12345678'
         );
 
@@ -109,13 +109,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_result' => '05',
             'vads_trans_uuid' => '008cb068c6164eaeb8452ede05e2ad05',
             'vads_bank_product' => 'G1',
-            'vads_trans_date' => '20170705081301',
+            'vads_trans_date' => '2017-20180705081301',
             'vads_ctx_mode' => 'TEST',
             'vads_action_mode' => 'INTERACTIVE',
             'vads_threeds_status' => 'Y',
             'vads_effective_amount' => '8894',
             'vads_version' => 'V2',
-            'vads_presentation_date' => '20170705081407',
+            'vads_presentation_date' => '2017-20180705081407',
             'vads_trans_status' => 'REFUSED',
             'vads_pays_ip' => 'FR',
             'vads_trans_id' => '000732',
@@ -125,7 +125,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_threeds_exit_status' => '10',
             'vads_card_country' => 'FR',
             'vads_amount' => '8894',
-            'vads_effective_creation_date' => '20170705081407',
+            'vads_effective_creation_date' => '2017-20180705081407',
             'vads_site_id' => '12345678'
         );
     }
@@ -137,7 +137,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+2017-20180705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+2017-20180705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++2017-20180705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
         $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data
@@ -161,7 +161,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+2017-20180705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+2017-20180705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++2017-20180705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
         $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data

@@ -1,2 +1,2 @@
-3.0.0, 2017-10-23:
+3.0.0, 2018-03-05:
 - New common API to make payment platform integration easier.
