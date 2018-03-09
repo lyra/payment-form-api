@@ -96,18 +96,3 @@ $i18n['risk_assessment'] = array(
     'RUN_RISK_ANALYSIS' => 'Call for an external risk analyser',
     'INFORM' => 'A warning message appears'
 );
-
-$i18n['ipn_response'] = array(
-    'payment_ok' => 'Valid payment processed',
-    'payment_ko' => 'Invalid payment processed',
-    'payment_ok_already_done' => 'Valid payment processed, already saved',
-    'payment_ko_already_done' => 'Invalid payment processed, already saved',
-    'ok' => '',
-    'order_not_found' => 'Order not found',
-    'payment_ko_on_order_ok' => 'Invalid payment result received for already validated order',
-    'auth_fail' => 'Authentication failed',
-    'empty_cart' => 'The cart was emptied before redirection',
-    'unknown_status' => 'Unknown order status',
-    'amount_error' => 'The amount paid is different from initial amount',
-    'ko' => ''
-);

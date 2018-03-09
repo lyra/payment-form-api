@@ -204,6 +204,29 @@ class Request
         $this->set('vads_trans_date', gmdate('YmdHis', $timestamp));
     }
 
+    public function setEncoding($encoding)
+    {
+        $this->encoding = Util::useEncoding($encoding);
+
+        return $this;
+    }
+
+    /**
+     * Set target URL of the payment form.
+     *
+     * @param string $url
+     * @return boolean
+     */
+    public function setPlatformUrl($url)
+    {
+        if (preg_match('#^https?://([^/]+/)+$#u', $url)) {
+            $this->platformUrl = $url;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Shortcut function used in constructor to build request parameters.
      *
@@ -386,22 +409,6 @@ class Request
     }
 
     /**
-     * Set target URL of the payment form.
-     *
-     * @param string $url
-     * @return boolean
-     */
-    public function setPlatformUrl($url)
-    {
-        if (preg_match('#^https?://([^/]+/)+$#u', $url)) {
-            $this->platformUrl = $url;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Enable/disable vads_redirect_* parameters.
      * Use false, 0, null, negative integer or 'false' to disable redirect.
      *
@@ -458,9 +465,10 @@ class Request
      * @param int $qty
      * @param string $ref
      * @param string $type
+     * @param float $vat
      * @return boolean
      */
-    public function addProduct($label, $amount, $qty, $ref, $type)
+    public function addProduct($label, $amount, $qty, $ref, $type = null, $vat = null)
     {
         $index = $this->get('nb_products') ? $this->get('nb_products') : 0;
         $ok = true;
@@ -472,6 +480,7 @@ class Request
         $ok &= $this->addField('vads_product_ref' . $index, 'Product reference', '#^[A-Za-z0-9]{0,64}$#u', false, $ref);
         $ok &= $this->addField('vads_product_type' . $index, 'Product type',
             '#^' . implode('|', self::$ACCORD_CATEGORIES) . '$#u', false, $type);
+        $ok &= $this->addField('vads_product_vat' . $index, 'Product tax rate', '#^((\d{1,12})|(\d{1,2}\.\d{1,4}))$#u', false, 12, $vat);
 
         // increment the number of products
         $ok &= $this->set('nb_products', $index + 1);

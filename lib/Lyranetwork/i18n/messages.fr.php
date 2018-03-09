@@ -96,18 +96,3 @@ $i18n['risk_assessment'] = array(
     'RUN_RISK_ANALYSIS' => 'Appel à un analyseur de risques externes',
     'INFORM' => 'Une alerte est remontée'
 );
-
-$i18n['ipn_response'] = array(
-    'payment_ok' => 'Paiement valide traité',
-    'payment_ko' => 'Paiement invalide traité',
-    'payment_ok_already_done' => 'Paiement valide traité, déjà enregistré',
-    'payment_ko_already_done' => 'Paiement invalide traité, déjà enregistré',
-    'ok' => '',
-    'order_not_found' => 'Impossible de retrouver la commande',
-    'payment_ko_on_order_ok' => 'Code paiement invalide reçu pour une commande déjà validée',
-    'auth_fail' => 'Echec d\'authentification',
-    'empty_cart' => 'Le panier a été vidé avant la redirection',
-    'unknown_status' => 'Statut de commande inconnu',
-    'amount_error' => 'Le montant payé est différent du montant intial',
-    'ko' => ''
-);

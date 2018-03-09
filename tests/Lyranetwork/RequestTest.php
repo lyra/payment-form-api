@@ -24,7 +24,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'key_test' => '1111111111111111',
             'key_prod' => '2222222222222222',
             'ctx_mode' => 'TEST',
-            'platform_url' => 'https://secure.payzen.eu/vads-payment/',
+            'platform_url' => 'https://secure.gateway.com/vads-payment/',
             'language' => 'en',
             'available_languages' => 'en;fr;de',
             'payment_cards' => '',
@@ -137,13 +137,13 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         // use fixed transaction ID and date
         $request->set('trans_id', '344903');
-        $request->set('trans_date', '2017-20180628073450');
+        $request->set('trans_date', '20170628073450');
 
-        $url = 'https://secure.payzen.eu/vads-payment/?signature=3ba916fbdd0081d186cc31462779aaac6aab1c82&vads_action_mode=INTERACTIVE&vads_amount=2356&vads_available_languages=en%3Bfr%3Bde&vads_capture_delay=&vads_contrib=test1.x_1.1.2%2F1.5.5%2F5.6.3&vads_ctx_mode=TEST&vads_currency=978&vads_cust_address=20%20Tests%20street&vads_cust_city=Testcity&vads_cust_country=FR&vads_cust_email=test%40test.com&vads_cust_first_name=Test&vads_cust_id=15&vads_cust_last_name=Lyra&vads_cust_phone=0000000000&vads_cust_zip=31777&vads_language=en&vads_order_id=ORD3536&vads_order_info=Important%20order&vads_page_action=PAYMENT&vads_payment_cards=&vads_payment_config=SINGLE&vads_return_mode=GET&vads_ship_to_city=Testcity&vads_ship_to_country=FR&vads_ship_to_first_name=Test&vads_ship_to_last_name=Lyra&vads_ship_to_phone_num=0000000000&vads_ship_to_state=63&vads_ship_to_street=20%20Tests%20street&vads_ship_to_street2=&vads_ship_to_zip=31777&vads_site_id=12345678&vads_trans_date=2017-20180628073450&vads_trans_id=344903&vads_url_return=http%3A%2F%2Fwww.mysite.com%2Freturn&vads_validation_mode=0&vads_version=V2';
+        $url = 'https://secure.gateway.com/vads-payment/?signature=3ba916fbdd0081d186cc31462779aaac6aab1c82&vads_action_mode=INTERACTIVE&vads_amount=2356&vads_available_languages=en%3Bfr%3Bde&vads_capture_delay=&vads_contrib=test1.x_1.1.2%2F1.5.5%2F5.6.3&vads_ctx_mode=TEST&vads_currency=978&vads_cust_address=20%20Tests%20street&vads_cust_city=Testcity&vads_cust_country=FR&vads_cust_email=test%40test.com&vads_cust_first_name=Test&vads_cust_id=15&vads_cust_last_name=Lyra&vads_cust_phone=0000000000&vads_cust_zip=31777&vads_language=en&vads_order_id=ORD3536&vads_order_info=Important%20order&vads_page_action=PAYMENT&vads_payment_cards=&vads_payment_config=SINGLE&vads_return_mode=GET&vads_ship_to_city=Testcity&vads_ship_to_country=FR&vads_ship_to_first_name=Test&vads_ship_to_last_name=Lyra&vads_ship_to_phone_num=0000000000&vads_ship_to_state=63&vads_ship_to_street=20%20Tests%20street&vads_ship_to_street2=&vads_ship_to_zip=31777&vads_site_id=12345678&vads_trans_date=20170628073450&vads_trans_id=344903&vads_url_return=http%3A%2F%2Fwww.mysite.com%2Freturn&vads_validation_mode=0&vads_version=V2';
         $this->assertSame($url, $request->getRequestUrl());
 
         $form = $request->getRequestHtmlForm();
-        $this->assertContains('<form action="https://secure.payzen.eu/vads-payment/" method="POST" >', $form,
+        $this->assertContains('<form action="https://secure.gateway.com/vads-payment/" method="POST" >', $form,
             'No form header generated.');
         $this->assertContains('<input type="submit" value="Pay" />', $form, 'No form button generated.');
         $this->assertContains(

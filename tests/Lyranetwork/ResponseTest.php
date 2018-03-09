@@ -54,13 +54,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_result' => '00',
             'vads_trans_uuid' => 'a450413f9ec04fcc9c11b9f3b2103c2c',
             'vads_bank_product' => 'A',
-            'vads_trans_date' => '2017-20180705073243',
+            'vads_trans_date' => '20170705073243',
             'vads_ctx_mode' => 'TEST',
             'vads_action_mode' => 'INTERACTIVE',
             'vads_threeds_status' => '',
             'vads_effective_amount' => '2525',
             'vads_version' => 'V2',
-            'vads_presentation_date' => '2017-20180705073311',
+            'vads_presentation_date' => '20170705073311',
             'vads_trans_status' => 'AUTHORISED',
             'vads_pays_ip' => 'FR',
             'vads_trans_id' => '000730',
@@ -70,7 +70,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_threeds_exit_status' => '7',
             'vads_card_country' => 'FR',
             'vads_amount' => '2525',
-            'vads_effective_creation_date' => '2017-20180705073311',
+            'vads_effective_creation_date' => '20170705073311',
             'vads_site_id' => '12345678'
         );
 
@@ -109,13 +109,13 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_result' => '05',
             'vads_trans_uuid' => '008cb068c6164eaeb8452ede05e2ad05',
             'vads_bank_product' => 'G1',
-            'vads_trans_date' => '2017-20180705081301',
+            'vads_trans_date' => '20170705081301',
             'vads_ctx_mode' => 'TEST',
             'vads_action_mode' => 'INTERACTIVE',
             'vads_threeds_status' => 'Y',
             'vads_effective_amount' => '8894',
             'vads_version' => 'V2',
-            'vads_presentation_date' => '2017-20180705081407',
+            'vads_presentation_date' => '20170705081407',
             'vads_trans_status' => 'REFUSED',
             'vads_pays_ip' => 'FR',
             'vads_trans_id' => '000732',
@@ -125,19 +125,32 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             'vads_threeds_exit_status' => '10',
             'vads_card_country' => 'FR',
             'vads_amount' => '8894',
-            'vads_effective_creation_date' => '2017-20180705081407',
+            'vads_effective_creation_date' => '20170705081407',
             'vads_site_id' => '12345678'
         );
     }
 
-    public function testAuthenticatedSha1()
+    public function testAuthentication()
+    {
+        // check default signature algo
+        $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222');
+        $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
+
+        // check this is a SHA-1 signature
+        $this->assertEquals('814748cc43a3959dc13dbf8eba28387436693085', $response->getComputedSignature());
+
+        $this->expectException('InvalidArgumentException');
+        $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222', 'AES-128');
+    }
+
+    public function testAuthenticationSha1()
     {
         // check signature for accepted payment data
         $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222', Util::ALGO_SHA1);
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+2017-20180705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+2017-20180705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++2017-20180705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
         $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data
@@ -152,7 +165,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
     }
 
-    public function testAuthenticatedSha256()
+    public function testAuthenticationSha256()
     {
         // check signature for accepted payment data
         $sha256Data = self::$acceptedPaymentData;
@@ -161,7 +174,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isAuthentified(), 'Error in computed signature.');
 
-        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+2017-20180705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+2017-20180705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++2017-20180705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
+        $expected = 'INTERACTIVE+2525+FULL+3fe69a+00+17807+A+0+CB+FR+497010XXXXXX0001+5785350+TEST+978+test@test.com+2525+20170705073311+978+6+2018+00+fr+DEBIT+ja-4013+PAYMENT+3cc3ddb343dfc734dd4e760e06abdf733cb83371+SINGLE+EC+FR+20170705073311+00+CARD_FRAUD=OK+1+12345678++++N+7+7++++20170705073243+000730+AUTHORISED+a450413f9ec04fcc9c11b9f3b2103c2c+0+V2+YES+1111111111111111';
         $this->assertSame($expected, $response->getComputedSignature(false));
 
         // check signature for inconsistent data
@@ -208,7 +221,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testFailedPayment()
     {
-        $response = new Response(self::$failedPaymentData, 'TEST', '1111111111111111', '2222222222222222');
+        $response = new Response(self::$failedPaymentData, '1111111111111111', '2222222222222222');
 
         $this->assertFalse($response->isAcceptedPayment());
         $this->assertFalse($response->isPendingPayment());
@@ -238,35 +251,34 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testGetOutputForPlatform()
     {
         $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222');
-        $response->setMerchantLanguage('en'); // responses will be translated to this language
 
         $msg = $response->getOutputForPlatform('payment_ok');
-        $this->checkOutputFormat($msg, $response->get('trans_id'), true);
-        $this->assertContains('Valid payment processed', $msg);
+        $this->checkOutputFormat($msg, true);
+        $this->assertContains('Accepted payment, order has been updated.', $msg);
 
         $msg = $response->getOutputForPlatform('payment_ko');
-        $this->checkOutputFormat($msg, $response->get('trans_id'), true);
-        $this->assertContains('Invalid payment processed', $msg);
+        $this->checkOutputFormat($msg, true);
+        $this->assertContains('Payment failure, order has been cancelled.', $msg);
 
         $msg = $response->getOutputForPlatform('payment_ok_already_done');
-        $this->checkOutputFormat($msg, $response->get('trans_id'), true);
-        $this->assertContains('Valid payment processed, already saved', $msg);
+        $this->checkOutputFormat($msg, true);
+        $this->assertContains('Accepted payment, already registered.', $msg);
 
         $msg = $response->getOutputForPlatform('auth_fail');
-        $this->checkOutputFormat($msg, $response->get('trans_id'), false);
-        $this->assertContains('Authentication failed', $msg);
+        $this->checkOutputFormat($msg, false);
+        $this->assertContains('An error occurred while computing the signature.', $msg);
 
         $msg = $response->getOutputForPlatform('order_not_found');
-        $this->checkOutputFormat($msg, $response->get('trans_id'), false);
-        $this->assertContains('Order not found', $msg);
+        $this->checkOutputFormat($msg, false);
+        $this->assertContains('Order not found.', $msg);
     }
 
-    private function checkOutputFormat($output, $transId, $success)
+    private function checkOutputFormat($output, $success)
     {
         $this->assertContains('<span style="display:none">', $output);
         $this->assertContains("\n" . '</span>', $output);
 
-        $regexp = $success ? "#>OK\-$transId#" : "#>KO\-$transId#";
+        $regexp = $success ? "#>OK\-#" : "#>KO\-#";
         $this->assertRegexp($regexp, $output, 'Invalid output generated as response to IPN call.');
     }
 }

@@ -96,18 +96,3 @@ $i18n['risk_assessment'] = array(
     'RUN_RISK_ANALYSIS' => 'Llamada a un analisador de riesgos exterior',
     'INFORM' => 'Un mensaje de advertencia aparece'
 );
-
-$i18n['ipn_response'] = array(
-    'payment_ok' => 'Pago válido procesado',
-    'payment_ko' => 'Pago no válido procesado',
-    'payment_ok_already_done' => 'Pago válido procesado, ya guardado',
-    'payment_ko_already_done' => 'Pago no válido procesado, ya guardado',
-    'ok' => '',
-    'order_not_found' => 'Pedido no encontrado',
-    'payment_ko_on_order_ok' => 'Resultado de pago no válido recibido por pedido ya validado',
-    'auth_fail' => 'Error de autenticación',
-    'empty_cart' => 'El carrito se vació antes de la redirección',
-    'unknown_status' => 'Estado de pedido desconocido',
-    'amount_error' => 'El monto pagado es diferente del monto inicial',
-    'ko' => ''
-);

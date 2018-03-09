@@ -292,7 +292,7 @@ class Util
      * @param mixed $default
      * @return mixed
      */
-    public static function findInArray($key, $array, $default)
+    public static function findInArray($key, $array, $default = null)
     {
         if (is_array($array) && key_exists($key, $array)) {
             return $array[$key];

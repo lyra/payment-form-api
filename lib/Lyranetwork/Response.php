@@ -26,8 +26,6 @@ class Response
 
     const TYPE_RISK_ASSESSMENT = 'risk_assessment';
 
-    const TYPE_IPN_RESPONSE = 'ipn_response';
-
     /**
      * Raw response parameters array.
      *
@@ -36,12 +34,18 @@ class Response
     private $rawResponse = array();
 
     /**
-     * Certificate used to check the signature.
+     * Certificate to use in TEST mode.
      *
-     * @see Util::sign
      * @var string
      */
-    private $certificate;
+    private $keyTest;
+
+    /**
+     * Certificate to use in PRODUCTION mode.
+     *
+     * @var string
+     */
+    private $keyProd;
 
     /**
      * Algorithm used to check the signature.
@@ -87,20 +91,6 @@ class Response
     private $transStatus;
 
     /**
-     * CMS original encoding.
-     *
-     * @var string
-     */
-    private $originalEncoding = 'UTF-8';
-
-    /**
-     * Prefered merchant language.
-     *
-     * @var string
-     */
-    private $merchantLanguage = 'en';
-
-    /**
      * Constructor for Response class.
      * Prepare to analyse IPN URL or return URL call.
      *
@@ -112,7 +102,13 @@ class Response
     public function __construct($params, $key_test, $key_prod, $algo = Util::ALGO_SHA1)
     {
         $this->rawResponse = Util::uncharm($params);
-        $this->certificate = $this->get('ctx_mode') == 'PRODUCTION' ? $key_prod : $key_test;
+        $this->keyTest = trim($key_test);
+        $this->keyProd = trim($key_prod);
+
+        if (! in_array($algo, Util::$SUPPORTED_ALGOS)) {
+            throw new \InvalidArgumentException("Algorithm passed ($algo) is not supported.");
+        }
+
         $this->algo = $algo;
 
         // payment results
@@ -125,40 +121,13 @@ class Response
     }
 
     /**
-     * Set website original encoding.
-     * If passed encoding is not recognized by API, UTF-8 is used.
-     *
-     * @param string $encoding
-     * @return Response
-     */
-    public function setOriginalEncoding($encoding)
-    {
-        $this->originalEncoding = Util::useEncoding($encoding);
-
-        return $this;
-    }
-
-    /**
-     * Set prefered merchant language used to translate responses sent to platform.
-     *
-     * @param string $language
-     * @return Response
-     */
-    public function setMerchantLanguage($language)
-    {
-        $this->merchantLanguage = $language;
-
-        return $this;
-    }
-
-    /**
      * Check response signature.
      *
      * @return bool
      */
     public function isAuthentified()
     {
-        return $this->getComputedSignature() == $this->getSignature();
+        return $this->getComputedSignature() === $this->getSignature();
     }
 
     /**
@@ -169,7 +138,8 @@ class Response
      */
     public function getComputedSignature($hashed = true)
     {
-        return Util::sign($this->rawResponse, $this->certificate, $this->algo, $hashed);
+        $certificate = ($this->get('ctx_mode') === 'PRODUCTION') ? $this->keyProd : $this->keyTest;
+        return Util::sign($this->rawResponse, $certificate, $this->algo, $hashed);
     }
 
     /**
@@ -462,45 +432,31 @@ class Response
     /**
      * Return a formatted string to output as a response to the notification URL call.
      *
-     * @param string $case shortcut code for current situations. Most useful : payment_ok, payment_ko, auth_fail
+     * @param string $code shortcut code for current situations. Most useful : payment_ok, payment_ko, auth_fail
      * @param string $extra_message some extra information to output to the payment platform
      * @return string
      */
-    public function getOutputForPlatform($case, $extra_message = '')
+    public function getOutputForPlatform($code, $extra_message = '')
     {
-        // predefined response messages according to case
-        $cases = array(
-            'payment_ok' => true,
-            'payment_ko' => true,
-            'payment_ok_already_done' => true,
-            'payment_ko_already_done' => true,
-            'ok' => true,
-            'order_not_found' => false,
-            'payment_ko_on_order_ok' => false,
-            'auth_fail' => false,
-            'empty_cart' => false,
-            'unknown_status' => false,
-            'amount_error' => false,
-            'ko' => false
-        );
+        if (! key_exists($code, self::$IPN_RESPONSES)) {
+            $code = 'ko';
+        }
 
-        $success = Util::findInArray($case, $cases, false);
-        $message = key_exists($case, $cases) ? self::translate($case, self::TYPE_IPN_RESPONSE, $this->merchantLanguage) : '';
+        /**
+         * @var array[status, message] $case
+         */
+        $case = self::$IPN_RESPONSES[$code];
+
+        $success = $case['status'];
+        $message = $case['message'];
 
         if (! empty($extra_message)) {
             $message .= ' ' . $extra_message;
         }
 
-        $message = trim($message);
-        $message = str_replace("\n", ' ', $message);
-
-        // convert response to send to platform if necessary
-        if ($this->originalEncoding !== 'UTF-8') {
-            $message = iconv($this->originalEncoding, 'UTF-8', $message);
-        }
+        $message = str_replace("\n", ' ', trim($message));
 
         $content = $success ? 'OK-' : 'KO-';
-        $content .= $this->get('trans_id');
         $content .= "$message\n";
 
         $response = '';
@@ -554,6 +510,22 @@ class Response
         $error = Util::findInArray($extra_result, self::$FORM_ERRORS, 'OTHER');
         return self::appendResultCode($error, $extra_result);
     }
+
+    public static $IPN_RESPONSES = array(
+        'payment_ok' => array('status' => true, 'message' => 'Accepted payment, order has been updated.'),
+        'payment_ko' => array('status' => true, 'message' => 'Payment failure, order has been cancelled.'),
+        'payment_ko_bis' => array('status' => true, 'message' => 'Payment failure.'),
+        'payment_ok_already_done' => array('status' => true, 'message' => 'Accepted payment, already registered.'),
+        'payment_ko_already_done' => array('status' => true, 'message' => 'Payment failure, already registered.'),
+        'order_not_found' => array('status' => false, 'message' => 'Order not found.'),
+        'payment_ko_on_order_ok' => array('status' => false, 'message' => 'Order status does not match the payment result.'),
+        'auth_fail' => array('status' => false, 'message' => 'An error occurred while computing the signature.'),
+        'empty_cart' => array('status' => false, 'message' => 'Empty cart detected before order processing.'),
+        'unknown_status' => array('status' => false, 'message' => 'Unknown order status.'),
+        'amount_error' => array('status' => false, 'message' => 'Total paid is different from order amount.'),
+        'ok' => array('status' => true, 'message' => ''),
+        'ko' => array('status' => false, 'message' => '')
+    );
 
     public static $FORM_ERRORS = array(
         '00' => 'SIGNATURE',

@@ -24,7 +24,7 @@ require_once('vendor/autoload.php');
 
 ### Manual Installation
 
-If you do not wish to use Composer, you can download the [latest release](https://github.com/payzen/payment-form-api/releases). Then, to use the API, include the `init.php` file.
+If you do not wish to use Composer, you can download the [latest release](https://github.com/lyra/payment-form-api/releases). Then, to use the API, include the `init.php` file.
 
 ```php
 require_once('/path/to/payment-form-api/init.php');
@@ -50,10 +50,10 @@ $request->set('sign_algo', $algo);
 $request->set('site_id', '12345678');
 $request->set('amount', '100'); // amount in cents
 $request->set('currency', '978');
-$request->set('capture_delay', 0);
-$request->set('validation_mode', 0);
+$request->set('capture_delay', '');
+$request->set('validation_mode', '');
 
-echo $request->getRequestHtmlForm();
+echo $request->getRequestHtmlForm(); // display generated payment form
 ```
 
 To process payment result, do : 
@@ -67,7 +67,7 @@ $response = new \LyraNetwork\Response($_REQUEST, $keyTest, $keyProd, $algo);
 
 if (! $response->isAuthentified()) {
     // Unauthenticated response received
-    die('Authentication failed !');
+    die('An error occurred while computing the signature.');
 }
 
 $order = get_my_order($response->get('order_id'));
@@ -78,7 +78,7 @@ if ($response->isAcceptedPayment()) {
 
     // redirect to success page
 } elseif ($response->isCancelledPayment()) {
-    // redirect to cart page
+    // redirect to cart page to allow re-order
 } else {
      // failed payment logic here
      update_my_order($order, 'failed');
@@ -91,4 +91,4 @@ if ($response->isAcceptedPayment()) {
 
 Each Lyra payment form API source file included in this distribution is licensed under GNU GENERAL PUBLIC LICENSE (GPL 3.0).
 
-Please see LICENSE.txt for the full text of the GPL 3.0 license. It is also available through the world-wide-web at this URL: http://www.gnu.org/licenses/.
+Please see LICENSE file for the full text of the GPL 3.0 license. It is also available through the world-wide-web at this URL: http://www.gnu.org/licenses/.

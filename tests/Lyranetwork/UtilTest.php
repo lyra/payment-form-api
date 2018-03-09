@@ -41,7 +41,8 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertTrue(Util::isSupportedLanguage('fr'));
-        $this->assertFalse(Util::isSupportedLanguage('ppp'));
+        $this->assertFalse(Util::isSupportedLanguage('kab'));
+        $this->assertFalse(Util::isSupportedLanguage('invalid'));
     }
 
     public function testSupportedCurrencies()
@@ -87,7 +88,6 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     public function testSign()
     {
         $params = array(
-            'signature' => '',
             'vads_action_mode' => 'INTERACTIVE',
             'vads_amount' => '3119',
             'vads_cust_address' => '20, rue des Tests Résidence Testée',
@@ -103,7 +103,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
             'vads_cust_last_name' => 'Lyra',
             'vads_cust_phone' => '0787878787',
             'vads_cust_title' => 'M',
-            'vads_trans_date' => '2017-20180626132245',
+            'vads_trans_date' => '20170626132245',
             'vads_trans_id' => '553658',
             'vads_url_return' => 'http://www.mysite.com/return',
             'vads_validation_mode' => '',
@@ -133,7 +133,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         );
 
         $key = '1111111111111111';
-        $expected = 'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+2017-20180626132245+553658+http://www.mysite.com/return++V2+1111111111111111';
+        $expected = 'INTERACTIVE+3119++Test1.x_1.1.3/1.7.0.6/5.6.24+TEST+978+20, rue des Tests Résidence Testée+Testville+FR+test.lyra@test.com+Test+2+Lyra+0787878787+M+13652+fr+1+472+PAYMENT++SINGLE+2599+Robe imprimée+1+3+CLOTHING_AND_ACCESSORIES+GET+Testville+FR+Test+Lyra+0787878787+20, rue des Tests+Résidence Testée+13652+12345678+20170626132245+553658+http://www.mysite.com/return++V2+1111111111111111';
 
         $this->assertEquals($expected, Util::sign($params, $key, Util::ALGO_SHA1, false),
             'Invalid signature string computed.');
@@ -147,6 +147,9 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1));
         $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256));
+
+        $this->expectException('InvalidArgumentException');
+        Util::sign($params, $key, 'Unsupported algo');
     }
 
     public function testFindInArray()
@@ -166,5 +169,6 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Lyra', Util::findInArray('last_name', $array, 'Default'));
         $this->assertEquals('', Util::findInArray('phone_num', $array, 'Default'));
         $this->assertEquals('Default', Util::findInArray('unknown_key', $array, 'Default'));
+        $this->assertNull(Util::findInArray('unknown_key', $array));
     }
 }

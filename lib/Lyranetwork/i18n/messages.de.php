@@ -96,18 +96,3 @@ $i18n['risk_assessment'] = array(
     'RUN_RISK_ANALYSIS' => 'Call for an external risk analyser',
     'INFORM' => 'A warning message appears'
 );
-
-$i18n['ipn_response'] = array(
-    'payment_ok' => 'Gültige Zahlung bearbeitet',
-    'payment_ko' => 'Ungültige Zahlung bearbeitet',
-    'payment_ok_already_done' => 'Gültige Zahlung bearbeitet, schon registriert',
-    'payment_ko_already_done' => 'Ungültige Zahlung bearbeitet, schon registriert',
-    'ok' => '',
-    'order_not_found' => 'Bestellung nicht auffindbar',
-    'payment_ko_on_order_ok' => 'Ungültiger Zahlungscode für eine bereits bestätigte Bestellung erhalten',
-    'auth_fail' => 'Authentifizierungsfehler',
-    'empty_cart' => 'Der Warenkorb wurde vor Weiterleitung geleert',
-    'unknown_status' => 'Unbekannt Bestellungstatus',
-    'amount_error' => 'Gezahlten Betrag unterscheidet sich vom Anfangsbetrag',
-    'ko' => ''
-);
