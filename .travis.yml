@@ -1,0 +1,27 @@
+sudo: false
+
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
+      env: VAR_OLD_PHP=true
+
+install:
+  - 'if [ "$VAR_OLD_PHP" = "true" ]; then 
+      wget -O phpunit-4.phar https://phar.phpunit.de/phpunit-4.phar ;
+    fi'
+
+script:
+  - 'if [ "$VAR_OLD_PHP" = "true" ]; then
+      php phpunit-4.phar ;
+    else
+      phpunit ;
+    fi'
