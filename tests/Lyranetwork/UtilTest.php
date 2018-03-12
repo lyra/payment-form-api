@@ -148,8 +148,15 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('84bebd03bf751abe00ba45867df8c39d2dd47294', Util::sign($params, $key, Util::ALGO_SHA1));
         $this->assertEquals('C05G1Tw7fXmVH44yQpNBtflpjyxqptUJYgw3hiodWns=', Util::sign($params, $key, Util::ALGO_SHA256));
 
-        $this->expectException('InvalidArgumentException');
-        Util::sign($params, $key, 'Unsupported algo');
+        $algo = 'AES-128';
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage("Unsupported algorithm passed : {$algo}.");
+        } else {
+            $this->setExpectedException('InvalidArgumentException', "Unsupported algorithm passed : {$algo}.");
+        }
+
+        Util::sign($params, $key, $algo);
     }
 
     public function testFindInArray()

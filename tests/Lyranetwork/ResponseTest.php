@@ -139,7 +139,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         // check this is a SHA-1 signature
         $this->assertEquals('814748cc43a3959dc13dbf8eba28387436693085', $response->getComputedSignature());
 
-        $this->expectException('InvalidArgumentException');
+        $algo = 'AES-128';
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage("Algorithm passed ($algo) is not supported.");
+        } else {
+            $this->setExpectedException('InvalidArgumentException', "Algorithm passed ($algo) is not supported.");
+        }
+
         $response = new Response(self::$acceptedPaymentData, '1111111111111111', '2222222222222222', 'AES-128');
     }
 

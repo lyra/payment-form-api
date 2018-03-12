@@ -151,7 +151,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'No signature field generated.');
 
         $pattern = '#^<input name="vads_[a-z0-9]+(_[a-z0-9]+)*" value="[^<>]*" type="hidden" />$#m';
-        $count = preg_match_all($pattern, $form);
+        $matches = array();
+        $count = preg_match_all($pattern, $form, $matches);
         $this->assertSame(38, $count, 'Some form fields are missing or invalid.');
 
         $fields = $request->getRequestArrayFields();
