@@ -3,7 +3,6 @@
          bootstrap="tests/bootstrap.php" 
          colors="true"
          verbose="true">
-
     <testsuites>
         <testsuite name="Lyra payment form API Test Suite">
             <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">tests</directory>
@@ -15,5 +14,4 @@
             <directory>lib</directory>
         </whitelist>
     </filter>
-
 </phpunit>
