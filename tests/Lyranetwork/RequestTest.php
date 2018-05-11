@@ -85,7 +85,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $errors = array();
         $request->isRequestReady($errors);
-        $this->assertEmpty($errors, 'Validation errors occured : ' . print_r($errors, true));
+        $this->assertEmpty($errors, 'Validation errors occurred : ' . print_r($errors, true));
 
         $data = array(
             'amount' => 23.56, // must be in cents
